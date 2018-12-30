@@ -74,7 +74,7 @@ public class StdDrawDemo {
 		  * at smooth animation will look bad and flickery (remove it and see 
 		  * what happens!). */
 		StdDraw.enableDoubleBuffering();
-
+		 
 
 		double size = 100;
 		while (size < 500) {
