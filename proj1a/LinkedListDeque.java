@@ -1,102 +1,63 @@
-public class LinkedListDeque<michigan> {
-    public class DequeNode{
-        public DequeNode prev;
-        public michigan item;
-        public DequeNode next;
-
-        public DequeNode(DequeNode p, michigan i, DequeNode n){
-            prev = p;
+public class LinkedListDeque<T>{
+    public class IntNode{
+        public T item;
+        public IntNode next;
+        public IntNode prev;
+        public IntNode(T i,IntNode n,IntNode p){
             item = i;
-            next =n;
+            next = n;
+            prev = p;
         }
     }
-
-    private DequeNode sentinel;
+    private IntNode sentinel;
     private int size;
 
-    public LinkedListDeque(){
+    public  LinkedListDeque(){
+
+        sentinel = new IntNode(null,null,null);
         size = 0;
-        sentinel = new DequeNode(null, null, null);
-        sentinel.next = sentinel;
-        sentinel.prev = sentinel;
     }
-    public LinkedListDeque(michigan x){
-        size = 1;
-        sentinel = new DequeNode(null, null, null);
-        sentinel.next = new DequeNode(sentinel, x, sentinel);
-        sentinel.prev = sentinel.next;
-    }
-
-    public void addFirst(michigan x){
+    public void addFirst(T item){
+        sentinel.next = new IntNode(item,sentinel.next,sentinel.prev);
         size += 1;
-        sentinel.next.prev = new DequeNode(sentinel, x, sentinel.next);
-        sentinel.next = sentinel.next.prev;
     }
-
-    public void addLast(michigan x){
+    public void addLast(T item){
+        sentinel.prev  = new IntNode(item,null,sentinel.prev);
         size += 1;
-        sentinel.prev.next = new DequeNode(sentinel.prev, x, sentinel);
-        sentinel.prev = sentinel.prev.next;
     }
-
     public boolean isEmpty(){
-        if(sentinel.next == sentinel){
+        if (sentinel.next == null){
             return true;
         }
         return false;
     }
-
+    public void printDeque(){
+        while (sentinel.next!=null){
+            IntNode p = sentinel;
+            System.out.print(p.next.item);
+            System.out.print(' ');
+            p.next=p.next.next;
+        }
+    }
+    public T removeFirst(){
+        T i = sentinel.next.item;
+        sentinel.next = sentinel.next.next;
+        return i;
+    }
+    public T removeLast(){
+        T i = sentinel.prev.item;
+        sentinel.prev = sentinel.prev.prev;
+        return i;
+    }
+    public T get(int index){
+        if (index == 0){
+            return sentinel.next.item;
+        }
+        sentinel.next = sentinel.next.next;
+        return get(index-1);
+    }
     public int size(){
         return size;
     }
-
-    public void printDeque(){
-        DequeNode p = sentinel;
-        for(int i = 0; i < size; i++){
-            System.out.print(p.next.item+" ");
-            p = p.next;
-        }
-    }
-
-    public michigan removeFirst(){
-        michigan first = sentinel.next.item;
-        sentinel.next = sentinel.next.next;
-        sentinel.next.prev = sentinel;
-        /* alternative implemention */
-        //sentinel.next.next.prev = sentinel;
-        //sentinel.next = sentinel.next.next;
-        return first;
-    }
-
-    public michigan removeLast(){
-        michigan last = sentinel.prev.item;
-        sentinel.prev = sentinel.prev.prev;
-        sentinel.prev.next = sentinel;
-        return last;
-    }
-    
-    /** using iteration method */
-    public michigan get(int index){
-        if(index>=size){
-            return null;
-        }
-        DequeNode p = sentinel;
-        for(int i=0; i<=index; i++){
-            p = p.next;
-        }
-        return p.item;
-    }
-    /** using recursion method --non-destructive */
-    private michigan getRecursiveHelper(DequeNode d, int index){
-        if(index == 0){
-            return d.item;
-        }
-        return getRecursiveHelper(d.next, index-1);
-    }
-    public michigan getRecursive(int index){
-        if(index>=size){
-            return null;
-        }
-        return getRecursiveHelper(sentinel.next, index);
-    }
 }
+
